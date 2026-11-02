@@ -2,17 +2,27 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useLocale } from '@/components/providers/LocaleProvider'
+import { loadAskHistory, saveAskHistory, clearAskHistory } from '@/lib/progress/storage'
 
 type Msg = { role: 'user' | 'assistant'; text: string; sources?: { name: string; url: string }[] }
+
+const SUGGESTED: Record<'bn' | 'en', string[]> = {
+  bn: ['ভাড়া চুক্তি নেই, কী করব?', 'e-TIN কি বাধ্যতামূলক?', 'DBID কি ফ্রি?', 'ট্রেড লাইসেন্স কত টাকা?'],
+  en: ['No rent agreement, what can I use?', 'Is e-TIN required?', 'Is DBID free?', 'How much is a trade license?'],
+}
 
 export default function AskShuru() {
   const { locale } = useLocale()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const fabRef = useRef<HTMLButtonElement>(null)
-  const [messages, setMessages] = useState<Msg[]>([])
+  const [messages, setMessages] = useState<Msg[]>(() => loadAskHistory())
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
+
+  useEffect(() => {
+    saveAskHistory(messages)
+  }, [messages])
 
   useEffect(() => {
     const el = fabRef.current
@@ -42,17 +52,17 @@ export default function AskShuru() {
     rec.start()
   }
 
-  async function send() {
-    const q = input.trim()
-    if (!q || loading) return
+  async function send(q?: string) {
+    const question = (q ?? input).trim()
+    if (!question || loading) return
     setInput('')
-    setMessages((m) => [...m, { role: 'user', text: q }])
+    setMessages((m) => [...m, { role: 'user', text: question }])
     setLoading(true)
     try {
       const res = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: q, locale }),
+        body: JSON.stringify({ question, locale }),
       })
       const data = await res.json()
       if (res.status === 429) {
@@ -95,12 +105,39 @@ export default function AskShuru() {
       >
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h2 className="display text-lg">{t.title}</h2>
-          <button type="button" onClick={() => dialogRef.current?.close()} className="link text-sm">
-            {t.close}
-          </button>
+          <div className="flex items-center gap-2">
+            {messages.length > 0 && (
+              <button
+                type="button"
+                onClick={() => { clearAskHistory(); setMessages([]) }}
+                className="link text-sm"
+              >
+                {locale === 'bn' ? 'মুছুন' : 'Clear'}
+              </button>
+            )}
+            <button type="button" onClick={() => dialogRef.current?.close()} className="link text-sm">
+              {t.close}
+            </button>
+          </div>
         </div>
         <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto px-4 py-3">
-          {messages.length === 0 && <p className="text-sm text-muted">{t.empty}</p>}
+          {messages.length === 0 && (
+            <div className="flex flex-col gap-3">
+              <p className="text-sm text-muted">{t.empty}</p>
+              <div className="flex flex-wrap gap-2">
+                {SUGGESTED[locale].map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => send(q)}
+                    className="rounded-pill border border-border bg-surface px-3 py-1 text-xs text-ink"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {messages.map((m, i) => (
             <div
               key={i}

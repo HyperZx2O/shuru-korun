@@ -6,6 +6,7 @@ import { LocaleProvider } from "@/components/providers/LocaleProvider";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SiteFooter from "@/components/layout/SiteFooter";
 import BackToTop from "@/components/ui/BackToTop";
+import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
 
 const notoBengali = Noto_Sans_Bengali({
   variable: "--font-noto-bengali",
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -43,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-1">{children}</main>
           <AskShuru />
           <BackToTop />
+          <ServiceWorkerRegister />
           <SiteFooter />
         </LocaleProvider>
       </body>

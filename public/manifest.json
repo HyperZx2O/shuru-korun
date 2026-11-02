@@ -1,0 +1,13 @@
+{
+  "name": "Shuru Korun",
+  "short_name": "Shuru Korun",
+  "description": "Start your business in Bangladesh, step by step.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f5ec",
+  "theme_color": "#f7d21a",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

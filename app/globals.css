@@ -1393,3 +1393,14 @@ dialog.ask-dialog::backdrop {
   color: var(--color-accent-deep);
   font-variant-numeric: tabular-nums;
 }
+/* Print: clean roadmap for paper. */
+@media print {
+  .site-header, .site-footer, .glass-fab, .scroll-progress,
+  .intake-topbar, .intake-aside, .intake-rail { display: none !important; }
+  .roadmap-print .btn, .roadmap-print details > summary + ul { display: none !important; }
+  .roadmap-print .btn--primary { display: none !important; }
+  .roadmap-list { gap: 8px !important; }
+  .stack-card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+  body { background: #fff !important; color: #000 !important; }
+  a { color: #000 !important; text-decoration: none !important; }
+}

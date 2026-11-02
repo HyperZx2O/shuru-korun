@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useMemo, useEffect } from 'react'
+import { Suspense, useMemo, useEffect, useState, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { buildRoadmap } from '@/lib/engine/build-roadmap'
@@ -9,6 +9,7 @@ import { useLocale } from '@/components/providers/LocaleProvider'
 import ProgressSummary from '@/components/roadmap/ProgressSummary'
 import Reminders from '@/components/reminders/Reminders'
 import { FEATURES } from '@/lib/config/features'
+import { loadNA, setNA, exportProgress, importProgress } from '@/lib/progress/storage'
 
 const VALID_SELLS = ['food', 'retail', 'handmade', 'service', 'other'] as const
 const VALID_AREAS = ['dhaka-north', 'dhaka-south', 'other'] as const
@@ -52,6 +53,60 @@ function RoadmapInner() {
   const intake = useMemo(() => parse(params), [params])
   const { steps, notes } = useMemo(() => buildRoadmap(intake), [intake])
 
+  const [naMap, setNaMap] = useState<Record<string, { na: boolean; reason: string }>>({})
+  const [showSkipped, setShowSkipped] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    setNaMap(loadNA())
+    const onFocus = () => setNaMap(loadNA())
+    window.addEventListener('focus', onFocus)
+    return () => window.removeEventListener('focus', onFocus)
+  }, [])
+
+  const visibleSteps = useMemo(() => steps.filter((s) => !naMap[s.id]?.na), [steps, naMap])
+  const skippedSteps = useMemo(() => steps.filter((s) => naMap[s.id]?.na), [steps, naMap])
+
+  const restoreStep = (id: string) => {
+    setNA(id, false, '')
+    setNaMap(loadNA())
+  }
+
+  const url = typeof window !== 'undefined' ? window.location.href : ''
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(url)
+      alert(locale === 'bn' ? 'লিংক কপি হয়েছে' : 'Link copied')
+    } catch {
+      /* ignore */
+    }
+  }
+  const shareWhatsApp = () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank', 'noopener,noreferrer')
+  }
+  const printRoadmap = () => window.print()
+  const exportData = () => {
+    const blob = new Blob([exportProgress()], { type: 'application/json' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = 'shuru-korun-progress.json'
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+  const importData = (file: File) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const ok = importProgress(String(reader.result ?? ''))
+      if (ok) {
+        setNaMap(loadNA())
+        alert(locale === 'bn' ? 'ডেটা আমদানি হয়েছে' : 'Data imported')
+        window.location.reload()
+      } else {
+        alert(locale === 'bn' ? 'ফাইল পড়া যায়নি' : 'Could not read file')
+      }
+    }
+    reader.readAsText(file)
+  }
+
   const backLabel = locale === 'bn' ? 'রোডম্যাপে ফিরুন' : 'Back to roadmap'
   const title = locale === 'bn' ? 'আপনার রোডম্যাপ' : 'Your roadmap'
   const loading = locale === 'bn' ? 'রোডম্যাপ লোড হচ্ছে…' : 'Loading roadmap…'
@@ -61,10 +116,28 @@ function RoadmapInner() {
     : 'Confirm: you sell both online and in person. Check whether you also need a trade licence in addition to a DBID.'
 
   return (
-    <div className="container flex flex-col gap-6 py-8">
+    <div className="container flex flex-col gap-6 py-8 roadmap-print">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <h1 className="display text-2xl">{title}</h1>
-        <ProgressSummary total={steps.length} />
+        <div className="flex flex-wrap items-center gap-2">
+          <ProgressSummary total={visibleSteps.length} />
+          <button type="button" onClick={copyLink} className="btn btn--small">{locale === 'bn' ? 'লিংক কপি' : 'Copy link'}</button>
+          <button type="button" onClick={shareWhatsApp} className="btn btn--small">{locale === 'bn' ? 'হোয়াটসঅ্যাপ' : 'WhatsApp'}</button>
+          <button type="button" onClick={printRoadmap} className="btn btn--small">{locale === 'bn' ? 'প্রিন্ট' : 'Print'}</button>
+          <button type="button" onClick={exportData} className="btn btn--small">{locale === 'bn' ? 'এক্সপোর্ট' : 'Export'}</button>
+          <button type="button" onClick={() => fileInputRef.current?.click()} className="btn btn--small">{locale === 'bn' ? 'ইমপোর্ট' : 'Import'}</button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0]
+              if (f) importData(f)
+              e.target.value = ''
+            }}
+          />
+        </div>
       </div>
 
       {notes.includes('confirm-trade-license') && (
@@ -74,7 +147,7 @@ function RoadmapInner() {
       )}
 
       <ol className="roadmap-list flex flex-col gap-3">
-        {steps.map((step, i) => {
+        {visibleSteps.map((step, i) => {
           const label = STATUS_LABEL[step.status]
           return (
             <li key={step.id} className="rise" style={{ animationDelay: `${i * 40}ms` }}>
@@ -95,7 +168,31 @@ function RoadmapInner() {
         })}
       </ol>
 
+      {visibleSteps.length === 0 && steps.length > 0 && (
+        <p className="text-muted">
+          {locale === 'bn' ? 'সব ধাপ এড়িয়ে যাওয়া হয়েছে।' : 'All steps skipped.'}
+        </p>
+      )}
       {steps.length === 0 && <p className="text-muted">{empty}</p>}
+
+      {skippedSteps.length > 0 && (
+        <details className="sheet p-4 text-sm" open={showSkipped} onToggle={(e) => setShowSkipped((e.target as HTMLDetailsElement).open)}>
+          <summary className="cursor-pointer font-medium">
+            {locale === 'bn' ? `এড়িয়ে যাওয়া ধাপ (${skippedSteps.length})` : `Skipped steps (${skippedSteps.length})`}
+          </summary>
+          <ul className="mt-3 flex flex-col gap-2">
+            {skippedSteps.map((s) => (
+              <li key={s.id} className="flex items-center justify-between gap-2">
+                <span>{s.title[locale]}</span>
+                <span className="text-xs text-muted">{naMap[s.id]?.reason}</span>
+                <button type="button" onClick={() => restoreStep(s.id)} className="link text-xs">
+                  {locale === 'bn' ? 'পুনরায় চালু' : 'Restore'}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
 
       {FEATURES.reminders && <Reminders />}
     </div>

@@ -2,9 +2,11 @@
 
 import { useParams } from 'next/navigation'
 import { notFound } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useLocale } from '@/components/providers/LocaleProvider'
 import StepActions from '@/components/roadmap/StepActions'
+import { toggleDocDone, isDocDone } from '@/lib/progress/storage'
 import { TRADE_LICENSE_STEPS } from '@/lib/rules/trade-license'
 import { DBID_STEPS } from '@/lib/rules/dbid'
 import { SOURCES } from '@/lib/rules/sources'
@@ -21,6 +23,11 @@ export default function StepPage() {
   const { id } = useParams<{ id: string }>()
   const { locale } = useLocale()
   const step = ALL.find((s) => s.id === id)
+  const [docDone, setDocDone] = useState<boolean[]>([])
+  useEffect(() => {
+    if (!step) return
+    setDocDone(step.documents.map((_, i) => isDocDone(step.id, i)))
+  }, [step?.id])
   if (!step) notFound()
 
   const index = ALL.findIndex((s) => s.id === id)
@@ -75,14 +82,29 @@ export default function StepPage() {
           <ul className="flex flex-col gap-2">
             {step.documents.map((d, i) => (
               <li key={i} className="sheet p-3 text-sm">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-ink">{d.label[locale]}</span>
-                  <span className={`status ${STATUS_LABEL[d.status].cls}`}>
-                    {STATUS_LABEL[d.status][locale]}
+                <label className="flex cursor-pointer items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={!!docDone[i]}
+                    onChange={() => {
+                      const v = toggleDocDone(step.id, i)
+                      setDocDone((prev) => {
+                        const next = [...prev]
+                        next[i] = v
+                        return next
+                      })
+                    }}
+                    className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
+                  />
+                  <span className="flex-1">
+                    <span className="text-ink">{d.label[locale]}</span>
+                    <span className={`status ml-2 ${STATUS_LABEL[d.status].cls}`}>
+                      {STATUS_LABEL[d.status][locale]}
+                    </span>
+                    <p className="text-xs text-muted">{d.label[locale === 'bn' ? 'en' : 'bn']}</p>
+                    {d.note && <p className="mt-1 text-xs text-caution">{d.note[locale]}</p>}
                   </span>
-                </div>
-                <p className="text-xs text-muted">{d.label[locale === 'bn' ? 'en' : 'bn']}</p>
-                {d.note && <p className="mt-1 text-xs text-caution">{d.note[locale]}</p>}
+                </label>
               </li>
             ))}
           </ul>

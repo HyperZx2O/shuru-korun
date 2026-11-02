@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from '@/components/providers/LocaleProvider'
 import { buildRoadmap } from '@/lib/engine/build-roadmap'
+import { saveIntake } from '@/lib/progress/storage'
 
 type Sells = 'food' | 'retail' | 'handmade' | 'service' | 'other'
 type Area = 'dhaka-north' | 'dhaka-south' | 'other'
@@ -75,6 +76,8 @@ export default function IntakePage() {
 
   function submit() {
     if (!sells || !area || !premises || channels.length === 0) return
+    const intake = { sells, area, channels, premises, food }
+    saveIntake(intake)
     const params = new URLSearchParams()
     params.set('sells', sells)
     params.set('area', area)
