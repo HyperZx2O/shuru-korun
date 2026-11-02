@@ -1,0 +1,41 @@
+{
+  "brand": "Shuru Korun",
+  "tagline": "Start your business, step by step.",
+  "brief": "A free, mobile-first guide that tells a first-time founder in Bangladesh exactly what to do, in what order, to start a small business. Playful, soft, warm — paper, torn edges, Chillax.",
+  "adjectives": [
+    "playful",
+    "soft",
+    "warm",
+    "clear"
+  ],
+  "criteria": "Success: distinct from generic startup marks, recognisable at 16 px, works in one colour, feels like paper and growth.",
+  "industry": "consumer-app",
+  "nav": [
+    "Start",
+    "Roadmap",
+    "Scam shield"
+  ],
+  "brand_color": "#f7d21a",
+  "greyscale": true,
+  "designer": "Shuru Korun",
+  "round": 1,
+  "concepts": [
+    {
+      "name": "Sprout (chosen)",
+      "symbol": "concept-a.svg",
+      "lockup": "lockup-horizontal.svg",
+      "idea": "A single seed splitting open into a small shoot — 'start' as growth.",
+      "rationale": [
+        "Growth metaphor ties to the product's promise",
+        "Each colour owns a job from the Hum palette",
+        "Works in one colour (black master) and at 16 px (favicon cut)"
+      ]
+    }
+  ],
+  "recommendation": "Sprout — the only concept with a single clear ownable idea that isn't a generic step/path metaphor.",
+  "next_steps": [
+    "Outline the wordmark <text> to paths",
+    "Generate PNG/icon set with a renderer (cairosvg/inkscape/chrome)",
+    "Final artwork, variants and guidelines"
+  ]
+}

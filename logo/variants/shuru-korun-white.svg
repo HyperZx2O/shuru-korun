@@ -1,0 +1,10 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg"><title>Shuru Korun</title>
+  
+  <g transform="translate(128,138) scale(1.22) translate(-128,-138)">
+    <ellipse cx="128" cy="192" rx="40" ry="30" fill="#ffffff"/>
+    <circle cx="148" cy="178" r="7" fill="#ffffff"/>
+    <path d="M124 164 Q122 130 126 98 Q128 94 132 98 Q136 130 134 164 Z" fill="#ffffff"/>
+    <ellipse cx="94" cy="122" rx="30" ry="16" transform="rotate(-32 94 122)" fill="#ffffff"/>
+    <ellipse cx="162" cy="106" rx="34" ry="18" transform="rotate(28 162 106)" fill="#ffffff"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg width="256" height="320" viewBox="0 0 256 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Shuru Korun stacked lockup (text-based, convert to paths before final)</title>
+  <g transform="translate(0,0) scale(0.85) translate(19,0)">
+    <ellipse cx="128" cy="192" rx="40" ry="30" fill="#f7d21a"/>
+    <circle cx="148" cy="178" r="7" fill="#ff6165"/>
+    <path d="M124 164 Q122 130 126 98 Q128 94 132 98 Q136 130 134 164 Z" fill="#1a1a1f"/>
+    <ellipse cx="94" cy="122" rx="30" ry="16" transform="rotate(-32 94 122)" fill="#5ba32b"/>
+    <ellipse cx="162" cy="106" rx="34" ry="18" transform="rotate(28 162 106)" fill="#2563eb"/>
+  </g>
+  <text x="128" y="288" text-anchor="middle" font-family="Chillax, ui-rounded, sans-serif" font-size="40" font-weight="600" fill="#1a1a1f" letter-spacing="-0.03em">Shuru Korun</text>
+</svg>

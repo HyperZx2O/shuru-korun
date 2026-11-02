@@ -1,0 +1,17 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- ticket 1 -->
+  <g transform="rotate(-12 90 128)">
+    <rect x="56" y="96" width="68" height="64" rx="8" fill="black"/>
+    <circle cx="90" cy="128" r="6" fill="white"/>
+  </g>
+  <!-- ticket 2 -->
+  <g transform="rotate(0 128 128)">
+    <rect x="94" y="96" width="68" height="64" rx="8" fill="black"/>
+    <circle cx="128" cy="128" r="6" fill="white"/>
+  </g>
+  <!-- ticket 3 -->
+  <g transform="rotate(12 166 128)">
+    <rect x="132" y="96" width="68" height="64" rx="8" fill="black"/>
+    <circle cx="166" cy="128" r="6" fill="white"/>
+  </g>
+</svg>

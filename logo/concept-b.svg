@@ -1,0 +1,9 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- torn sheet -->
+  <path d="M48 40 H208 V180 L200 192 L192 182 L184 194 L176 184 L168 196 L160 186 L152 198 L144 188 L136 200 L128 190 L120 202 L112 192 L104 204 L96 194 L88 206 L80 196 L72 208 L64 198 L56 210 L48 200 Z" fill="black"/>
+  <!-- folded corner (top-right) -->
+  <path d="M208 40 L208 80 L168 40 Z" fill="white"/>
+  <path d="M168 40 L208 40 L208 80" fill="none" stroke="black" stroke-width="2"/>
+  <!-- highlighter band (pear) - shown as a lighter rect for now -->
+  <rect x="64" y="110" width="128" height="16" rx="4" fill="white" opacity="0.6"/>
+</svg>

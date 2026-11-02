@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Shuru Korun favicon</title>
+  <g transform="translate(32,30) scale(1.55) translate(-32,-30)">
+    <ellipse cx="32" cy="46" rx="12" ry="9" fill="#f7d21a"/>
+    <circle cx="38" cy="42" r="2" fill="#ff6165"/>
+    <rect x="30.5" y="20" width="3" height="26" rx="1.5" fill="#1a1a1f"/>
+    <ellipse cx="24" cy="30" rx="9" ry="5" transform="rotate(-32 24 30)" fill="#5ba32b"/>
+    <ellipse cx="40" cy="26" rx="10" ry="5" transform="rotate(28 40 26)" fill="#2563eb"/>
+  </g>
+</svg>
