@@ -30,13 +30,19 @@ export default function AskShuru() {
   const fabRef = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [messages, setMessages] = useState<Msg[]>(() => loadAskHistory())
+  const hydrated = useRef(false)
+  const [messages, setMessages] = useState<Msg[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
   const [copied, setCopied] = useState<number | null>(null)
   const [retryQ, setRetryQ] = useState<string | null>(null)
   const [lastQ, setLastQ] = useState('')
+
+  useEffect(() => {
+    setMessages(loadAskHistory())
+    hydrated.current = true
+  }, [])
 
   useEffect(() => {
     const el = fabRef.current
@@ -48,12 +54,12 @@ export default function AskShuru() {
   }, [])
 
   useEffect(() => {
-    const SR = (window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }).SpeechRecognition
-      ?? (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition
+    const SR = (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
     setVoiceSupported(!!SR)
   }, [])
 
   useEffect(() => {
+    if (!hydrated.current) return
     saveAskHistory(messages)
   }, [messages])
 
