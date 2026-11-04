@@ -1412,7 +1412,7 @@ dialog.ask-dialog::backdrop {
   background-image: var(--grain), var(--fibre);
   clip-path: var(--tear-card);
   box-shadow: var(--shadow-card);
-  padding-block-start: var(--space-md);
+  padding: var(--space-xs);
 }
 .ask-dialog::backdrop {
   background: rgba(28, 22, 16, 0.45);

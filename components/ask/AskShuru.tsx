@@ -163,9 +163,9 @@ export default function AskShuru() {
       <dialog
         ref={dialogRef}
         aria-labelledby="ask-title"
-        className="ask-dialog w-[min(92vw,32rem)] rounded-card border border-border bg-surface p-0 text-ink"
+        className="ask-dialog w-[min(92vw,36rem)] rounded-card border border-border bg-surface p-0 text-ink"
       >
-        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <div className="flex items-center justify-between border-b border-border px-6 py-5">
           <h2 id="ask-title" className="display text-lg">{t.title}</h2>
           <div className="flex items-center gap-2">
             {messages.length > 0 && (
@@ -182,7 +182,7 @@ export default function AskShuru() {
             </button>
           </div>
         </div>
-        <div ref={scrollRef} className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto px-4 py-3">
+        <div ref={scrollRef} className="flex max-h-[65vh] flex-col gap-3 overflow-y-auto px-6 py-5">
           {messages.length === 0 && (
             <div className="flex flex-col gap-3">
               <p className="text-sm text-muted">{t.empty}</p>
@@ -255,7 +255,7 @@ export default function AskShuru() {
           )}
         </div>
         <form
-          className="flex gap-2 border-t border-border px-4 py-3"
+          className="flex gap-2 border-t border-border px-6 py-5"
           onSubmit={(e) => {
             e.preventDefault()
             send()
@@ -288,7 +288,7 @@ export default function AskShuru() {
             {t.send}
           </button>
         </form>
-        <p className="px-4 pb-3 text-xs text-muted">{t.footer}</p>
+        <p className="px-6 pb-5 text-xs text-muted">{t.footer}</p>
       </dialog>
     </>
   )
