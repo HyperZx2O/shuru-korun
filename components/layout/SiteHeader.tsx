@@ -31,13 +31,11 @@ export default function SiteHeader() {
         </nav>
 
         <div className="nav-actions">
-          <span
-            className="sticker sticker-wobble"
-            role="img"
-            aria-label="Built For Ostad Presents YUNet AIgnite Buildathon 2026 sticker — official file pending"
-          >
-            Built For Ostad
-          </span>
+          <img
+            src="/built-for-aignite-2026.png"
+            alt="Built For Ostad Presents YUNet AIgnite Buildathon 2026"
+            className="sticker-wobble h-10 w-auto shrink-0"
+          />
           <LanguageToggle />
           <ThemeToggle />
           <a href="/path" className="btn btn--small btn--primary nav-start">

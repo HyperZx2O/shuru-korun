@@ -135,7 +135,7 @@ Rules data tests fail if any step lacks a source, a date, or a status, or if an 
 
 ## Open items
 
-- Official "Built For Ostad" sticker file (pending from organizers; a labelled placeholder is shown in the navbar).
+- Official "Built For Ostad" sticker placed in the navbar (official file received).
 - Whether a home-based online seller needs a trade license as well as a DBID.
 - Current trade license document list and fee schedule (verify on the portal).
 - DBID full field list and whether any fee applies.
